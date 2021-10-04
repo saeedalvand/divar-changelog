@@ -18,3 +18,12 @@
     <tbody></tbody>
 </table>
 <span class="sort-button">&#x25BC</span>
+<div class="filters">
+    <form @submit.prevent="applyFilters">
+        <div class="form-group">        
+            <label for="filter-name"></label>
+            <input type="text" id="filter-name">
+        </div>
+    </form>
+</div>
+<input type="submit" value="اعمال">
