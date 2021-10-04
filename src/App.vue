@@ -1,10 +1,10 @@
 <template>
   <img alt="Vue logo" src="./assets/logo.png">  
   <table>
-    <thead>
-        <th>شماره</th>
+    <thead>        
+        <th>شماره <span title="مرتب‌سازی" class="sort-button active" @click="changeSortTo('id')">&#x25BC;</span></th>
         <th> نام شخص</th>
-        <th>تاریخ</th>
+        <th>تاریخ <span title="مرتب‌سازی" class="sort-button" @click="changeSortTo('date')">&#x25BC;</span></th>
         <th>عنوان</th>
         <th>فیلد</th>
         <th>قبلی</th>
@@ -21,6 +21,7 @@ import row from './components/row.vue'
 import inputData from './assets/data.json'
 const step = 20;
 var lastCachedItem = step;
+var sortParam = 'id'
 export default {
   name: 'App',
   components: {
@@ -30,14 +31,40 @@ export default {
       if(window.scrollMaxY == window.scrollY){
         console.log('calling handleScroll');
         lastCachedItem += step;
-        this.dataCache = inputData.slice(0,lastCachedItem)
+        if(sortParam === 'id')
+          this.dataCache = this.changelogs.slice(0,lastCachedItem)
+        else if (sortParam === 'date')
+          this.dataCache = this.sortedByDate.slice(0,lastCachedItem)
       }
+    },
+    changeSortTo(by){
+      console.log('sort by '+ by)
+      sortParam = by
+      lastCachedItem = step;
+      if(by==='date')
+        this.dataCache = this.sortedByDate.slice(0,step)
+      else if(by==='id')
+        this.dataCache = this.changelogs.slice(0,step)
+
+      document.getElementsByClassName('sort-button')[0].classList.toggle('active')
+      document.getElementsByClassName('sort-button')[1].classList.toggle('active')
     }
   },
   data:function () {
+    let sorted = inputData.slice()
+    sorted.sort((b,a) => {
+      if (a.date > b.date) {
+        return 1;
+      }
+      if (a.date < b.date) {
+        return -1;
+      }
+      return 0;
+    });
     let cache = inputData.slice(0,step)
     return{
       changelogs : inputData,
+      sortedByDate: sorted,
       dataCache: cache
     }
   },
@@ -68,7 +95,11 @@ table{
 thead{
   background-color: #ffe26a;
 }
-tr{
-  border-top: 1px solid lightgray;
+.sort-button.active{
+  color: #ddc049;
 }
+.sort-button:not(.active){
+  cursor: pointer;
+}
+
 </style>

@@ -24,5 +24,6 @@ export default {
 td {  
   text-align: center;
   border-left: 1px solid lightgray;
+  border-top: 1px solid lightgray;
 }
 </style>
