@@ -35,6 +35,7 @@
           <th>فیلد</th>
           <th>قبلی</th>
           <th>جدید</th>
+          <th>&#x2605;</th>
       </thead>    
       <tbody>      
           <row  v-for="item in dataCache" :key="item.id" :changelog="item"/>             
@@ -174,10 +175,10 @@ export default {
       date: urlParams.get('date') || ''
     }
     this.filters = filters
-     for(let element of document.getElementsByTagName('input')){
-          if(element.type !== 'submit')
-            element.value = filters[element.name]
-      }
+    for(let element of document.getElementsByTagName('input')){
+        if(element.type !== 'submit')
+          element.value = filters[element.name]
+    }
     this.applyFilters()
   },
   unmounted () {
