@@ -19,8 +19,8 @@
             <input type="text" id="field" name="field" :value="filters.field">
         </div>
         <div class="buttons">          
-          <input type="submit" value="اعمال">
-          <button id="reset" @click="resetFilters">حذف فیلترها</button>
+          <input  class="button" type="submit" value="اعمال">
+          <button class="button"  id="reset" @click="resetFilters">حذف فیلترها</button>
         </div>
     </form>
   </div>
@@ -74,7 +74,21 @@ function  analyzeForm(inputs){
   result.urlSearch = text.substr(0,text.length-1);
   return result
 }
-
+// function binarySearch(item,collection,start,end) {
+//   if(!start)
+//     start =0
+//   if(!end)
+//     end=collection.length-1
+//   if (start>=end)
+//     return false;
+//   let center = Math.floor((start+end)/2)
+//   if(item===collection[center].date)
+//     return true;    
+//   if(item > collection[center].date)
+//     binarySearch(item,collection,start,center-1);
+//   else
+//     binarySearch(item,collection,center+1,end);
+// }
 export default {
   name: 'App',
   components: {
@@ -109,19 +123,29 @@ export default {
       let tempUnsorted = this.rawData
       let tempSorted = this.sortedByDate
       this.filters = formResult.filters
-      for (const key in this.filters) {          
+      for (const key in this.filters) {                  
         let value = this.filters[key];
-        tempUnsorted = tempUnsorted.filter(function(item){
-          return item[key].includes(value)
-        },this)
-        tempSorted = tempSorted.filter(function(item){
-          return item[key].includes(value)
-        },this)
+        // if(key==='date'){
+        //   tempUnsorted = tempUnsorted.filter(function(){            
+        //     return binarySearch(value,this.sortedByDate)
+        //   },this)
+        //   tempSorted = tempSorted.filter(function(){
+        //     return binarySearch(value,this.sortedByDate)
+        //   },this)
+        // }
+        // else{
+          tempUnsorted = tempUnsorted.filter(function(item){
+            return item[key].includes(value)
+          },this)
+          tempSorted = tempSorted.filter(function(item){
+            return item[key].includes(value)
+          },this)
+        // }
       }      
       this.dataCache = tempUnsorted.slice(0,step)
       lastCachedItem = step
       this.filteredData = tempUnsorted
-      this.filteredSortedData = tempSorted
+      this.filteredSortedData = tempSorted      
     },
 
     resetFilters(){
@@ -165,7 +189,6 @@ export default {
     }
   },
   mounted(){
-    console.log('mounted')
     window.addEventListener('scroll', this.loadMore);
     let urlParams = new URLSearchParams(window.location.search)
     let filters = {
@@ -193,7 +216,9 @@ export default {
   font-family: "vazir";
   src: local("vazir"),   url("./assets/fonts/vazir.ttf") format("truetype");
 }
-
+img{
+  margin:auto;
+}
 #app {
   direction: rtl;
   font-family: "vazir";
@@ -218,9 +243,39 @@ form{
 input[type="submit"], button{
   cursor: pointer;
 }
+input{
+  margin: 5px;
+  padding: 5px;
+}
+.button,.form-group{
+  display: flex;
+}
+.button{
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+}
+.button:hover{
+  background-color: #3d9e40;
+  transition: background-color 100ms linear;
+}
+.button#reset{
+  background-color: #999;
+}
+.button#reset:hover{
+  background-color: #888;
+}
 @media only screen and (max-width: 997px) {
   form{
     flex-direction: column;
+  }
+  .form-group>*{
+    flex:1;
   }
 }
 </style>

@@ -42,11 +42,9 @@ export default {
       }
     }
   },
-  mounted(){
-    console.log('mounted')
+  mounted(){    
     if (localStorage && localStorage.getItem("starredList"))
       var starredList = JSON.parse(localStorage.getItem("starredList"));
-      console.log(this.changelog.id)
       if(starredList.includes(this.changelog.id))
         this.isStarred = true
   }
